@@ -94,7 +94,7 @@ html,body{
 #tab-sorteio .hist-wrap{flex-shrink:0;padding:5px 14px;border-top:1px solid #2D2660;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;}
 
 /* PAINÉIS SECUNDÁRIOS com scroll */
-#tab-cartelas{padding:0;overflow-y:auto;display:flex;flex-direction:column;}
+#tab-cartelas{padding:0;overflow-y:auto;flex-direction:column;}
 #tab-itens,#tab-metodologia{padding:14px;overflow-y:auto;}
 
 /* STATS */
@@ -354,6 +354,41 @@ body.theme-light #cartelas-serie-selector{background:#EFE9FA !important;border-b
 body.theme-light #display-graph-wrap{background:#FFFFFF !important;border-color:#FDBA7488 !important;}
 body.theme-light #display-graph-label{color:#92400E !important;}
 body.theme-light #display-graph svg rect:first-child{fill:#F4F1FC !important;}
+
+/* ANIMAÇÃO "PENSANDO" — aparece quando a questão não tem gráfico/figura */
+#display-thinking-wrap{width:100%;flex-shrink:0;margin-top:10px;background:#12102A;border:2px solid #3D3560;border-radius:14px;padding:22px 12px;display:flex;align-items:center;justify-content:center;flex:1;min-height:140px;}
+body.theme-light #display-thinking-wrap{background:#FFFFFF !important;border-color:#DCD4F2 !important;}
+.think-anim{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;}
+.think-caption{font-size:13px;font-weight:700;color:var(--white);opacity:0.75;letter-spacing:0.3px;}
+
+/* Variante 1: emoji pensativo com "?" flutuando ao redor */
+.think-v1{height:90px;justify-content:center;}
+.think-v1 .think-emoji{font-size:56px;animation:thinkBounce 1.4s ease-in-out infinite;}
+.think-v1 .think-q{position:absolute;font-weight:900;color:var(--gold);animation:floatQ 1.9s ease-in-out infinite;}
+.think-v1 .think-q.q1{top:2px;left:calc(50% - 54px);font-size:20px;animation-delay:0s;}
+.think-v1 .think-q.q2{top:-6px;left:calc(50% + 34px);font-size:28px;animation-delay:0.35s;}
+.think-v1 .think-q.q3{top:22px;left:calc(50% + 54px);font-size:16px;animation-delay:0.7s;}
+@keyframes thinkBounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-12px);}}
+@keyframes floatQ{0%,100%{transform:translateY(0) rotate(-8deg);opacity:0.35;}50%{transform:translateY(-16px) rotate(8deg);opacity:1;}}
+
+/* Variante 2: lupa deslizando sobre uma interrogação grande */
+.think-v2{height:90px;justify-content:center;}
+.think-v2 .think-big-q{font-size:60px;font-weight:900;color:var(--gold);opacity:0.35;}
+.think-v2 .think-glass{position:absolute;font-size:38px;animation:slideGlass 2.2s ease-in-out infinite;}
+@keyframes slideGlass{0%,100%{transform:translate(-26px,-6px) rotate(-8deg);}50%{transform:translate(26px,6px) rotate(8deg);}}
+
+/* Variante 3: lâmpada de ideia piscando */
+.think-v3 .think-bulb{font-size:54px;animation:bulbFlicker 1.6s ease-in-out infinite;}
+@keyframes bulbFlicker{0%,100%{opacity:0.45;filter:drop-shadow(0 0 0px var(--gold));}50%{opacity:1;filter:drop-shadow(0 0 16px var(--gold));}}
+
+/* Variante 4: nuvem de pensamento com pontinhos pulsando */
+.think-v4 .think-cloud{font-size:54px;animation:thinkBounce 1.8s ease-in-out infinite;}
+.think-dots{display:flex;gap:7px;}
+.think-dots span{width:10px;height:10px;border-radius:50%;background:var(--gold);display:inline-block;animation:dotPulse 1.2s ease-in-out infinite;}
+.think-dots span:nth-child(2){animation-delay:0.2s;}
+.think-dots span:nth-child(3){animation-delay:0.4s;}
+@keyframes dotPulse{0%,100%{opacity:0.25;transform:scale(0.75);}50%{opacity:1;transform:scale(1.15);}}
+
 /* DICA PRINCIPAL */
 #dica-box{background:#12102A;border:1px solid #3D3560;border-radius:10px;padding:6px 14px;width:100%;margin:0;display:none;flex-shrink:0;}
 #dica-box-label{font-size:9px;font-weight:700;letter-spacing:1.5px;color:#6B64A0;margin-bottom:2px;text-align:left;}
@@ -488,6 +523,7 @@ body{font-family:'Rajdhani',sans-serif;background:#1a1630;}
 .cctrl.primary{background:#7C3AED;color:white;}
 .cctrl.success{background:#059669;color:white;}
 .cctrl.warning{background:#D97706;color:white;}
+.cctrl.danger{background:#B91C1C;color:white;}
 #cartelas-psel{display:flex;gap:6px;flex-wrap:wrap;padding:10px 20px;background:#181530;border-bottom:1px solid #2D2660;}
 .cpbtn{font-size:11px;padding:4px 12px;border-radius:6px;border:1px solid #3D3560;background:transparent;color:#8B84C0;cursor:pointer;font-family:'Rajdhani',sans-serif;font-weight:600;transition:all 0.15s;}
 .cpbtn.active{background:#7C3AED;color:white;border-color:#7C3AED;}
@@ -522,7 +558,7 @@ body{font-family:'Rajdhani',sans-serif;background:#1a1630;}
 
 @media print{
   @page{size:A4;margin:8mm;}
-  body:not(.printing-roteiro) #cartelas-ctrl,body:not(.printing-roteiro) #cartelas-serie-selector,body:not(.printing-roteiro) #cartelas-psel,body:not(.printing-roteiro) #header,body:not(.printing-roteiro) #tabs{display:none!important;}
+  body:not(.printing-roteiro) #cartelas-ctrl,body:not(.printing-roteiro) #cartelas-serie-selector,body:not(.printing-roteiro) #cartelas-psel,body:not(.printing-roteiro) #header,body:not(.printing-roteiro) #tabs,body:not(.printing-roteiro) #cartelas-persist-note{display:none!important;}
   body:not(.printing-roteiro){background:white!important;overflow:auto!important;height:auto!important;}
   html{height:auto!important;overflow:auto!important;}
   #app-wrap,#content-area{height:auto!important;display:block!important;overflow:visible!important;}
@@ -761,6 +797,11 @@ body.theme-light #apr-cta-wrap{background:linear-gradient(to top,#F7F5FC 60%,tra
         <div id="display-graph"></div>
       </div>
 
+      <!-- ANIMAÇÃO "PENSANDO" (quando a questão não tem gráfico/figura) -->
+      <div id="display-thinking-wrap" style="display:none;">
+        <div id="display-thinking"></div>
+      </div>
+
     </div><!-- /sorteio-central -->
 
     </div><!-- /sorteio-main -->
@@ -815,7 +856,11 @@ body.theme-light #apr-cta-wrap{background:linear-gradient(to top,#F7F5FC 60%,tra
     <h2 id="cartelas-ctrl-title">🖨️ CARTELAS PARA IMPRESSÃO — 30 Cartelas · 9º ANO</h2>
     <button class="cctrl primary" onclick="window.print()">🖨️ Imprimir Tudo</button>
     <button class="cctrl success" onclick="showAllCartelas()">👁️ Ver Todas</button>
-    <button class="cctrl warning" onclick="regenerateCartelas()">🔄 Regerar Cartelas</button>
+    <button class="cctrl warning" onclick="regenerateCartelas()" title="Reorganiza o layout das 30 cartelas, mantendo as mesmas 15 perguntas do sorteio.">🔄 Regerar Cartelas</button>
+    <button class="cctrl danger" onclick="novoConjuntoPerguntas()" title="Sorteia 15 perguntas diferentes. As cartelas já impressas deixam de valer — será preciso reimprimir.">🎯 Novo Conjunto de Perguntas</button>
+  </div>
+  <div id="cartelas-persist-note" style="padding:6px 20px;font-size:11px;color:#6B64A0;background:#181530;border-bottom:1px solid #2D2660;">
+    ✅ As perguntas sorteadas na aba <b>Sorteio</b> são sempre as mesmas 15 destas cartelas — inclusive se você fechar e reabrir a página. Isso só muda se você trocar de série/bloco ou clicar em "Novo Conjunto de Perguntas".
   </div>
   <div id="cartelas-serie-selector" class="series-selector-like">
     <span style="font-size:11px;color:#6B64A0;align-self:center;font-weight:600;margin-right:2px;">SÉRIE DA CARTELA:</span>
@@ -2209,6 +2254,18 @@ const CAT_NAMES={v:'9º ANO',b:'1ª SÉRIE',p:'2ª SÉRIE',f:'3ª SÉRIE',r:'REC
 const CELL_CLS={v:'cv',b:'cb',p:'cp',f:'cf',free:'cfree'};
 const NIVEL_CLS={facil:'cb',medio:'cp',dificil:'cf'};
 const NIVEL_COLOR={facil:{main:'#059669',light:'#D1FAE5'},medio:{main:'#D97706',light:'#FEF3C7'},dificil:{main:'#DC2626',light:'#FEE2E2'}};
+
+// ─── ANIMAÇÕES "PENSANDO" (quando a questão não tem gráfico/figura) ─────────────
+const THINKING_ANIMS=[
+  `<div class="think-anim think-v1"><div class="think-emoji">🤔</div><div class="think-q q1">?</div><div class="think-q q2">?</div><div class="think-q q3">?</div></div><div class="think-caption">Pensando na resposta...</div>`,
+  `<div class="think-anim think-v2"><div class="think-big-q">?</div><div class="think-glass">🔎</div></div><div class="think-caption">Vamos investigar...</div>`,
+  `<div class="think-anim think-v3"><div class="think-bulb">💡</div></div><div class="think-caption">A ideia vai surgir!</div>`,
+  `<div class="think-anim think-v4"><div class="think-cloud">💭</div><div class="think-dots"><span></span><span></span><span></span></div></div><div class="think-caption">Hmm... quase lá!</div>`
+];
+function randomThinkingAnim(){
+  return THINKING_ANIMS[Math.floor(Math.random()*THINKING_ANIMS.length)];
+}
+
 // Na 3ª Série, o "médio" (amarelo) é trocado por lilás para não conflitar com a cor de identidade da série
 const NIVEL_COLOR_OVERRIDE_3SERIE={medio:{main:'#9333EA',light:'#F3E8FF'}};
 
@@ -2272,6 +2329,12 @@ function syncSerieUI(){
   const title=document.getElementById('cartelas-ctrl-title');
   const lbl=(serieAtual==='r')?`RECOMPOSIÇÃO · BLOCO ${recompBloco}`:CAT_NAMES[serieAtual];
   if(title) title.textContent=`🖨️ CARTELAS PARA IMPRESSÃO — 30 Cartelas · ${lbl}`;
+  if(serieAtual==='r'){
+    document.querySelectorAll('.recomp-bloco-chip').forEach((c,i)=>c.classList.toggle('active', i===recompBloco-1));
+    document.querySelectorAll('.recomp-bloco-content').forEach(d=>d.style.display='none');
+    const el=document.getElementById('recomp-bloco-'+recompBloco);
+    if(el) el.style.display='block';
+  }
 }
 
 // ─── TEMAS DE CORES ─────────────────────────────────────────────────────────────
@@ -2335,6 +2398,50 @@ function pickRoundSubset(){
   const medio=shuffle(source.filter(x=>x.nivel==='medio')).slice(0,5);
   const dificil=shuffle(source.filter(x=>x.nivel==='dificil')).slice(0,5);
   currentRoundPool=[...facil,...medio,...dificil];
+  salvarRoundPool();
+}
+
+// ─── PERSISTÊNCIA DO CONJUNTO DE PERGUNTAS DA RODADA ────────────────────────────
+// Garante que, se o professor imprimir as cartelas e fechar/reabrir a página
+// (ou voltar num outro dia) depois, o SORTEIO continue usando exatamente
+// as mesmas 15 perguntas que estão nas cartelas já impressas — para CADA
+// série/bloco separadamente (trocar de série não apaga o que foi salvo das outras).
+function roundPoolKey(){
+  return serieAtual==='r' ? ('r'+recompBloco) : serieAtual;
+}
+
+function salvarRoundPool(){
+  try{
+    const all=JSON.parse(localStorage.getItem('bingoMatRoundPools')||'{}');
+    all[roundPoolKey()]=currentRoundPool.map(x=>x.id);
+    localStorage.setItem('bingoMatRoundPools', JSON.stringify(all));
+    localStorage.setItem('bingoMatLastSerie', JSON.stringify({serie:serieAtual, bloco:recompBloco}));
+  }catch(e){}
+}
+
+function restaurarUltimaSerieAtiva(){
+  try{
+    const last=JSON.parse(localStorage.getItem('bingoMatLastSerie')||'null');
+    if(last && last.serie){
+      serieAtual=last.serie;
+      if(last.serie==='r' && last.bloco) recompBloco=last.bloco;
+    }
+  }catch(e){}
+}
+
+function tentarRestaurarRoundPool(){
+  let all=null;
+  try{ all=JSON.parse(localStorage.getItem('bingoMatRoundPools')||'null'); }catch(e){ return false; }
+  if(!all) return false;
+  const ids=all[roundPoolKey()];
+  if(!ids) return false;
+  const source=fullPoolFor();
+  const byId={}; source.forEach(x=>byId[x.id]=x);
+  const restored=ids.map(id=>byId[id]).filter(Boolean);
+  // Só restaura se todas as 15 perguntas salvas ainda existirem no banco atual
+  if(restored.length!==15 || restored.length!==ids.length) return false;
+  currentRoundPool=restored;
+  return true;
 }
 
 function getPoolItems(){ return currentRoundPool; }
@@ -2481,14 +2588,19 @@ function drawItem(){
   pq.style.color='var(--white)';
   setTimeout(()=>pq.className='',400);
 
-  // Gráfico para análise (somente itens de Recomposição)
+  // Gráfico para análise (somente itens de Recomposição) — ou animação "pensando" quando não há gráfico
   const graphWrap=document.getElementById('display-graph-wrap');
+  const thinkWrap=document.getElementById('display-thinking-wrap');
   if(currentItem.chart){
     document.getElementById('display-graph').innerHTML=currentItem.chart;
     graphWrap.style.display='block';
+    thinkWrap.style.display='none';
+    document.getElementById('display-thinking').innerHTML='';
   } else {
     document.getElementById('display-graph').innerHTML='';
     graphWrap.style.display='none';
+    document.getElementById('display-thinking').innerHTML=randomThinkingAnim();
+    thinkWrap.style.display='flex';
   }
 
   document.getElementById('current-call').textContent=`#${drawn.length} — Pergunta:`;
@@ -2582,14 +2694,23 @@ function revealAnswer(auto=false){
 }
 
 function resetGame(){
-  if(!confirm('Reiniciar? Todas as marcações e dicas extras serão resetadas.')) return;
+  if(!confirm('Reiniciar a rodada?\n\nAs marcações, o histórico de sorteio e as dicas usadas serão zerados, mas as MESMAS 15 perguntas continuam valendo — as cartelas já impressas continuam corretas.')) return;
   rodada++;
-  doResetInterno();
+  doResetInterno(false);
 }
 
-function doResetInterno(){
+// Ação separada e explícita para quando o professor realmente quer um NOVO
+// conjunto de 15 perguntas (ex.: para uma turma diferente ou uma nova aula).
+// Deixa claro que isso invalida cartelas já impressas.
+function novoConjuntoPerguntas(){
+  if(!confirm('Sortear um NOVO conjunto de 15 perguntas?\n\n⚠️ As cartelas já impressas deixarão de corresponder ao sorteio. Você precisará reimprimir as cartelas (aba "Cartelas" → "Imprimir Tudo") depois de confirmar.')) return;
+  rodada++;
+  doResetInterno(true);
+}
+
+function doResetInterno(regenerarPerguntas=true){
   stopTimer();
-  pickRoundSubset();
+  if(regenerarPerguntas) pickRoundSubset();
   drawn=[]; bingoCount=0;
   dicasExtrasUsadas=0; dicasExtrasDisponiveis=[...DICAS_EXTRAS_POOL];
   currentItem=null; dicaShown=false; extraShown=false; respostaShown=false; tempoExtraUsado=false; faseAtual=0; setFase(0);
@@ -2613,6 +2734,8 @@ function doResetInterno(){
   document.getElementById('display-nivel').className='';
   document.getElementById('display-graph').innerHTML='';
   document.getElementById('display-graph-wrap').style.display='none';
+  document.getElementById('display-thinking').innerHTML='';
+  document.getElementById('display-thinking-wrap').style.display='none';
   document.getElementById('dica-box').style.display='none';
   document.getElementById('dica-extra-box').style.display='none';
   document.getElementById('resposta-box').style.display='none';
@@ -2904,7 +3027,11 @@ function toggleHistorico(){
 
 // ─── INIT ─────────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', function(){
-  pickRoundSubset();
+  restaurarUltimaSerieAtiva();
+  if(!tentarRestaurarRoundPool()) pickRoundSubset();
+  syncSerieUI();
+  document.getElementById('s-restantes').textContent=getTotal();
+  document.getElementById('progress-label').textContent=`0 de ${getTotal()} sorteados`;
   buildCartelas();
   renderItems();
   const schoolLogoSrc = document.getElementById('school-logo').getAttribute('src');
